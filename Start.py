@@ -1,13 +1,16 @@
 import pygame
-import player
+import Player
+import Movement
+import json
 
-play = player.player()
+
+play = Player.Player()
 pygame.init()
 time = pygame.time.Clock()
 key = 0
 print("geht")
 move = ""
-List =[]
+List = []
 a = True
 pygame.display.set_mode((100, 100))
 while a is True:
@@ -43,14 +46,13 @@ while a is True:
                 key += 1
                 time_elapsed = (pygame.time.get_ticks() - time_down) / 1000.0
                 print("Nummer: ", key, "Zeit: ", time_elapsed)
-                tmp = (move, time_elapsed)
-                List.extend(tmp)
+                path = Movement.Movement(key, move, time_elapsed)
+                List.append(path)
 
-print('[%s]' % ', '.join(map(str, List)))
+for tmp in List:
+    print(tmp.id, tmp.move, tmp.time)
 
-
-
-
-
-
-
+s = json.dumps([ob.__dict__ for ob in List], indent=3)
+print(s)
+with open('file.json', 'w') as file:
+    file.write(s)
